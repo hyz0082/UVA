@@ -1,33 +1,61 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 using namespace std;
 vector<long> v;
 vector<char> vchar;
-int flag = 0;
+int flag = 0,f2=0;
 int main(){
-    while(1){
+    string str,str2;
+    while(getline(cin,str)){
+        if(str=="")
+            break;
+        str2 = str;
+        int cont = 0;
+        for(int i = 0; i < str.length(); i++){
+            if(cont==1 && str[i]=='+'){
+                cont = 0;
+                continue;
+            }
+            if(str[i]=='+'||str[i]=='-'||str[i]=='*'||str[i]=='/')
+                cont = 1;
+            else if(str[i]!=' ')
+                cont = 0;
+            cout << str[i];
+        }
+        cout << endl;
+        stringstream s1;
+        s1.str("");
+        s1.clear();
+        s1 << str;
+        //cout << str << endl;
         v.clear();
         vchar.clear();
         char c; long k;
-        string str;
-        c = cin.peek();
-        if(c==EOF)
-            break;
-        if(c=='+'||c=='-')
-            cin >> c;
-        cout << "www0";
+        c = s1.peek();
+        if(c=='+'||c=='-'){
+            s1 >> c;
+        }
+        char tmp;
         while(1){
-            c = cin.peek();
-            if(c <'9'&&c>'0'){
-                cin >> k;
+            c = s1.peek();
+            if(c==EOF)
+                break;
+            if(c <='9'&&c>='0'){
+                s1 >> k;
                 v.push_back(k);
-                if(flag==2)
-                    *(v.end()-1)= -*(v.end()-1);
+                //cout << "num:" << k << endl;
+                if(flag==2){   
+                    if(tmp=='-'){
+                        *(v.end()-1)= -*(v.end()-1);
+                    }
+                }
                 flag = 0;
             }
             else if(c=='+'||c=='-'||c=='*'||c=='/'){
-                cin >> c;
+                s1 >> c;
+                tmp = c;
                 if(flag==1){
                     flag=2;
                     continue;
@@ -36,18 +64,18 @@ int main(){
                 flag = 1;
             }
             else if(c=='='){
-                getline(cin,str);
+                getline(s1,str);
                 break;
             }
             else
-                c = getchar();
+                s1.get(c);
         }
-        for(vector<long>::iterator itert = v.begin();itert!=v.end();itert++)
-            cout << *itert << " ";
-        cout << endl;
-        for(vector<char>::iterator itert = vchar.begin();itert!=vchar.end();itert++)
-            cout <<*itert << " ";
-        cout << endl;
+        // for(vector<long>::iterator iter = v.begin();iter!=v.end();iter++)
+        //     cout << *iter << " ";
+        // cout << endl;
+        // for(vector<char>::iterator iter = vchar.begin();iter!=vchar.end();iter++)
+        //     cout << *iter << " ";
+        // cout << endl;
         while(vchar.size()>=1){
             vector<char>::iterator iter = vchar.begin();
             for(;iter!=vchar.end();iter++)
@@ -78,5 +106,6 @@ int main(){
             }
             cout << *(v.end()-1) << " " << str << endl;
         }
+        cout << endl;
     }
 }
